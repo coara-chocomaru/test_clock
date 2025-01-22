@@ -12,6 +12,10 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
+        compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+        }
     }
 
     signingConfigs {
@@ -43,5 +47,11 @@ android {
 }
 
 dependencies {
-         implementation 'androidx.core:core:1.0.0'
-}
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+    // JavaParserライブラリ
+    implementation 'com.github.javaparser:javaparser-core:3.24.0'
+    
+{
