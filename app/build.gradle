@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 34 // 最新の正しい値を確認してください
     namespace 'com.coara.javatest'
 
     defaultConfig {
@@ -13,8 +13,8 @@ android {
         versionCode 1
         versionName "1.0"
         compileOptions {
-        sourceCompatibility JavaVersion.VERSION_21
-        targetCompatibility JavaVersion.VERSION_21
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
         }
     }
 
@@ -35,7 +35,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable false
             zipAlignEnabled true
-            multiDexEnabled true
         }
     }
 
@@ -53,5 +52,4 @@ dependencies {
 
     // JavaParserライブラリ
     implementation 'com.github.javaparser:javaparser-core:3.24.0'
-    
-{
+}
