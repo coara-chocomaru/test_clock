@@ -12,37 +12,52 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
             height: 100vh;
             background: linear-gradient(135deg, #ff66b2, #ffccff);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif; /* フォントをPoppinsに変更 */
             overflow: hidden;
+            opacity: 0;
             animation: fadeIn 2s forwards;
         }
 
+        .clock-container {
+            text-align: center;
+            position: relative;
+        }
+
         .date {
-            font-size: 30px;
+            font-size: 24px;
             color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
+            margin-bottom: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            display: inline-block;
+            padding: 10px 20px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .date:hover {
+            background-color: rgba(255, 255, 255, 0.3);
         }
 
         .clock {
-            font-size: 120px;
+            font-size: 80px;
             color: #fff;
-            text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
             font-weight: 600;
-            letter-spacing: 5px;
-            animation: pulse 1.5s ease-in-out infinite;
+            border-radius: 15px;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: inline-block;
         }
 
         .year {
-            font-size: 18px;
-            color: #fff;
             position: absolute;
-            bottom: 20px;
+            top: 20px;
             right: 20px;
+            font-size: 20px;
+            color: #fff;
         }
 
         .toggle-button {
@@ -51,66 +66,70 @@
             left: 20px;
             background-color: #ff66b2;
             color: white;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 30px;
             border: none;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s ease, transform 0.2s;
         }
 
         .toggle-button:hover {
             background-color: #ff3385;
-            transform: scale(1.1);
-        }
-
-        .toggle-button:active {
-            transform: scale(0.95);
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
+            0% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
         }
-
-        /* Puyopuyo effect */
-        .clock:active {
-            transform: translateY(5px);
-            transition: transform 0.2s ease;
-        }
-
     </style>
 </head>
 <body>
-    <div class="date" id="date"></div>
-    <div class="clock" id="clock"></div>
-    <div class="year" id="year">2024</div>
-    <button class="toggle-button" onclick="toggleTimeFormat()">12/24</button>
+    <div class="clock-container">
+        <div class="date" id="date" onclick="animateDate()"></div>
+        <div class="clock" id="clock"></div>
+        <div class="year" id="year">2024</div>
+        <button class="toggle-button" onclick="toggleTimeFormat()">12/24</button>
+    </div>
 
     <script>
         let is24Hour = false;
         const clockElement = document.getElementById('clock');
-        const dateElement = document.getElementById('date');
         const yearElement = document.getElementById('year');
+        const dateElement = document.getElementById('date');
 
         function updateClock() {
             const now = new Date();
+            const months = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+            const month = months[now.getMonth()];
+            const day = now.getDate();
+            const formattedDate = `${month} ${day}日`;
+
             let hours = now.getHours();
             let minutes = now.getMinutes();
             let seconds = now.getSeconds();
             let ampm = '';
+
+            // 日付を更新
+            dateElement.textContent = formattedDate;
 
             if (!is24Hour) {
                 ampm = hours >= 12 ? 'PM' : 'AM';
@@ -123,16 +142,19 @@
             seconds = seconds < 10 ? '0' + seconds : seconds;
 
             clockElement.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-
-            // 月日表示
-            const month = now.getMonth() + 1;
-            const day = now.getDate();
-            dateElement.textContent = `${month}月${day}日`;
         }
 
         function toggleTimeFormat() {
             is24Hour = !is24Hour;
             updateClock();
+        }
+
+        function animateDate() {
+            // タップされた日付にアニメーションを追加
+            dateElement.style.animation = 'shake 0.5s ease';
+            setTimeout(() => {
+                dateElement.style.animation = '';
+            }, 500);
         }
 
         setInterval(updateClock, 1000);
