@@ -3,6 +3,7 @@ package com.coara.javatest;
 import android.os.Bundle;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceError;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -28,23 +29,29 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
 
-        // エラーハンドリング
+        // APIレベルによるエラーハンドリング
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                // APIレベル23以上の場合
                 super.onReceivedError(view, request, error);
-                Toast.makeText(MainActivity.this, "エラーが発生しました", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "エラーが発生しました: " + error.getDescription(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                // APIレベル22以下の場合
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                Toast.makeText(MainActivity.this, "エラーが発生しました: " + description, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // 戻るボタンを押した時にWebViewが戻る動作をするように設定
+    // 戻るボタンを無効にする
     @Override
     public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
-        }
+        // 戻るボタンが押された時に何もしない
+        // WebViewが戻る動作をしないようにする
+        // super.onBackPressed(); は呼び出さない
     }
 }
