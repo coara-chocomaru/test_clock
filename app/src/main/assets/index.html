@@ -14,22 +14,33 @@
             align-items: center;
             height: 100vh;
             background: linear-gradient(135deg, #ff66b2, #ffccff);
-            font-family: 'Poppins', sans-serif; /* フォントをPoppinsに変更 */
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
             opacity: 0;
             animation: fadeIn 2s forwards;
         }
 
-        .clock-container {
-            text-align: center;
+        .container {
             position: relative;
+            text-align: center;
         }
 
-        .date {
-            font-size: 24px;
+        /* 年号 */
+        .year {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
             color: #fff;
-            margin-bottom: 10px;
             font-weight: 600;
+        }
+
+        /* 日付 */
+        .date {
+            font-size: 22px;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 10px;
             cursor: pointer;
             border-radius: 12px;
             display: inline-block;
@@ -41,29 +52,22 @@
             background-color: rgba(255, 255, 255, 0.3);
         }
 
+        /* 時計 */
         .clock {
             font-size: 80px;
             color: #fff;
             text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
             font-weight: 600;
-            border-radius: 15px;
             padding: 10px 20px;
             background-color: rgba(0, 0, 0, 0.3);
-            display: inline-block;
+            border-radius: 15px;
         }
 
-        .year {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 20px;
-            color: #fff;
-        }
-
+        /* 12/24切り替えボタン */
         .toggle-button {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 10px;
+            left: 10px;
             background-color: #ff66b2;
             color: white;
             padding: 10px 20px;
@@ -87,12 +91,6 @@
             }
         }
 
-        @keyframes bounce {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-
         @keyframes shake {
             0% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
@@ -100,13 +98,21 @@
             75% { transform: translateX(-5px); }
             100% { transform: translateX(0); }
         }
+
     </style>
 </head>
 <body>
-    <div class="clock-container">
-        <div class="date" id="date" onclick="animateDate()"></div>
-        <div class="clock" id="clock"></div>
+    <div class="container">
+        <!-- 年号 -->
         <div class="year" id="year">2024</div>
+
+        <!-- 日付 -->
+        <div class="date" id="date" onclick="animateDate()"></div>
+
+        <!-- 時計 -->
+        <div class="clock" id="clock"></div>
+
+        <!-- 12/24切り替えボタン -->
         <button class="toggle-button" onclick="toggleTimeFormat()">12/24</button>
     </div>
 
@@ -123,14 +129,15 @@
             const day = now.getDate();
             const formattedDate = `${month} ${day}日`;
 
+            // 日付を更新
+            dateElement.textContent = formattedDate;
+
             let hours = now.getHours();
             let minutes = now.getMinutes();
             let seconds = now.getSeconds();
             let ampm = '';
 
-            // 日付を更新
-            dateElement.textContent = formattedDate;
-
+            // 12時間制の場合の処理
             if (!is24Hour) {
                 ampm = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
@@ -150,7 +157,7 @@
         }
 
         function animateDate() {
-            // タップされた日付にアニメーションを追加
+            // 日付をタップした時のアニメーション
             dateElement.style.animation = 'shake 0.5s ease';
             setTimeout(() => {
                 dateElement.style.animation = '';
