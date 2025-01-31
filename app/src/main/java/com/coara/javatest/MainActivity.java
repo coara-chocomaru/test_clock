@@ -27,14 +27,14 @@ public class MainActivity extends AppCompatActivity {
 
         // キャッシュ無効化の設定（API 9以降に対応）
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュなしで常にネットワークから読み込む
-
-        // 不要なキャッシュストレージを無効化
+        webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュ無効化
+        webView.getSettings().setDatabaseEnabled(false);  // データベース無効化
         webView.getSettings().setDomStorageEnabled(false);  // DOMストレージ無効化
 
         // httpsのみを使用し、cleartext通信を防ぐ
         webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
 
-        // WebView内でローカルファイルを読み込む
+        // ローカルHTMLを読み込む
         webView.loadUrl("file:///android_asset/index.html");  // オフラインでローカルHTMLを表示
 
         // WebViewのエラー処理
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // リダイレクトやリンク遷移の際に、WebView内で動作させる
+                // リダイレクトやリンク遷移の際にWebView内で動作させる
                 view.loadUrl(url);
                 return true;
             }
