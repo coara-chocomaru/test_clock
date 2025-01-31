@@ -6,6 +6,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceError;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebSettings;  // WebSettingsのインポートを追加
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,8 +26,7 @@ public class MainActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
 
         // キャッシュ設定を無効にする
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE); // キャッシュなしで常にネットワークから読み込む
-        webView.getSettings().setAppCacheEnabled(false);  // アプリのキャッシュを無効化
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュなしで常にネットワークから読み込む
 
         // WebView内でURLを読み込む
         webView.loadUrl("file:///android_asset/index.html");
