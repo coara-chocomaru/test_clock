@@ -1,5 +1,6 @@
 package com.coara.javatest;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -25,9 +26,21 @@ public class MainActivity extends AppCompatActivity {
         // JavaScriptを有効にする
         webView.getSettings().setJavaScriptEnabled(true);
 
-        // 完全オフライン環境用の設定
-        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);  // キャッシュをオフライン用にロード
+        // キャッシュを無効にする
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュを無効化
         webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュ無効化
+
+        // 追加のキャッシュ関連設定
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } else {
+            CookieSyncManager.createInstance(this);
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();
+        }
+
+        // データベースやストレージを無効にする（これもキャッシュの一種として扱われることがある）
         webView.getSettings().setDatabaseEnabled(false);  // データベース無効化
         webView.getSettings().setDomStorageEnabled(false);  // DOMストレージ無効化
 
