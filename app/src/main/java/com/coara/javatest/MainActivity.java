@@ -25,44 +25,41 @@ public class MainActivity extends AppCompatActivity {
         // JavaScriptを有効にする
         webView.getSettings().setJavaScriptEnabled(true);
 
-        // キャッシュ無効化の設定（API 9以降に対応）
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュなしで常にネットワークから読み込む
+        // 完全オフライン環境用の設定
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);  // キャッシュをオフライン用にロード
         webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュ無効化
         webView.getSettings().setDatabaseEnabled(false);  // データベース無効化
         webView.getSettings().setDomStorageEnabled(false);  // DOMストレージ無効化
 
-        // httpsのみを使用し、cleartext通信を防ぐ
-        webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-
-        // ローカルHTMLを読み込む
-        webView.loadUrl("file:///android_asset/index.html");  // オフラインでローカルHTMLを表示
-
-        // WebViewのエラー処理
+        // インターネットアクセスを完全に遮断する
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                // APIレベル23以上の場合
                 super.onReceivedError(view, request, error);
                 Toast.makeText(MainActivity.this, "エラーが発生しました: " + error.getDescription(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                // APIレベル22以下の場合
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 Toast.makeText(MainActivity.this, "エラーが発生しました: " + description, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // リダイレクトやリンク遷移の際にWebView内で動作させる
-                view.loadUrl(url);
-                return true;
+                // ローカルHTMLファイルにリンクがある場合のみ読み込む
+                if (url.startsWith("file://")) {
+                    view.loadUrl(url);
+                    return true;
+                } else {
+                    // 外部URLへのアクセスは無効化
+                    return false;
+                }
             }
         });
 
-        // WebChromeClientを設定（オプション）
-        webView.setWebChromeClient(new WebChromeClient());
+        // ローカルのHTMLファイルを読み込む
+        webView.loadUrl("file:///android_asset/index.html");  // オフラインでローカルHTMLを表示
     }
 
     // 戻るボタンを無効にする
