@@ -1,33 +1,50 @@
 package com.coara.javatest;
 
 import android.os.Bundle;
-import android.webkit.WebSettings;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
-import android.widget.Button;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
-    private Button toggleButton;
-    private boolean is24Hour = false; // 24時間表示か12時間表示かを切り替えるフラグ
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // WebViewの設定
         webView = findViewById(R.id.webView);
-        toggleButton = findViewById(R.id.toggleButton);
+        webView.getSettings().setJavaScriptEnabled(true);
 
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+        // WebView内でURLを読み込む
         webView.loadUrl("file:///android_asset/index.html");
 
-        // 12/24時間切り替えボタン
-        toggleButton.setOnClickListener(v -> {
-            is24Hour = !is24Hour;
-            webView.evaluateJavascript("changeTimeFormat(" + is24Hour + ");", null);
+        // JavaScriptの動作を許可
+        webView.setWebViewClient(new WebViewClient());
+        webView.setWebChromeClient(new WebChromeClient());
+
+        // エラーハンドリング
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                Toast.makeText(MainActivity.this, "エラーが発生しました", Toast.LENGTH_SHORT).show();
+            }
         });
+    }
+
+    // 戻るボタンを押した時にWebViewが戻る動作をするように設定
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
