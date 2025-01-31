@@ -75,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
         webView.loadUrl("file:///android_asset/index.html");  // オフラインでローカルHTMLを表示
     }
 
-    // 戻るボタンを無効にする
+    // 戻るボタンを無効化
     @Override
     public void onBackPressed() {
-        // 戻るボタンが押された時にWebViewが履歴を戻らないようにする
-        // 戻らないようにするため、WebViewの履歴がある場合でも何もしない
-        // これでアプリが落ちなくなります
+        // バックキーを無効化
+        // 何も処理しないことでバックキーを無効化
     }
 }
