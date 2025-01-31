@@ -11,7 +11,7 @@
 -dontusemixedcaseclassnames
 
 # Keep MainActivity class and its main method
--keep class com.coara.view.MainActivity {
+-keep class com.coara.javatest.MainActivity {
     public static void main(java.lang.String[]);
 }
 
