@@ -79,10 +79,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // 戻るボタンが押された時にWebViewが履歴を戻らないようにする
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();  // 履歴がない場合は通常の戻る処理
-        }
+        // 戻らないようにするため、WebViewの履歴がある場合でも何もしない
+        // これでアプリが落ちなくなります
     }
 }
