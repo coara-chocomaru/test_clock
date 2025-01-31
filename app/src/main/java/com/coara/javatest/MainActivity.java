@@ -25,21 +25,20 @@ public class MainActivity extends AppCompatActivity {
         // JavaScriptを有効にする
         webView.getSettings().setJavaScriptEnabled(true);
 
-        // キャッシュ設定を無効にする（API 9以降に対応）
+        // キャッシュ無効化の設定（API 9以降に対応）
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュなしで常にネットワークから読み込む
 
-        // 不要なキャッシュストレージを無効化
-        // setAppCacheEnabledは廃止されているため、削除しました。
-        webView.getSettings().setDomStorageEnabled(true);  // DOMストレージを有効化（オプション）
+        // 不要なキャッシュストレージを完全に無効化
+        webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュを無効化
+        webView.getSettings().setDomStorageEnabled(false);  // DOMストレージ無効化
 
         // httpsのみを使用し、cleartext通信を防ぐ
         webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
 
-        // WebView内でURLを読み込む
-        // ここではローカルファイルを読み込みます（offlineファイル）
-        webView.loadUrl("file:///android_asset/index.html");
+        // WebView内でローカルファイルを読み込む
+        webView.loadUrl("file:///android_asset/index.html");  // オフラインでローカルHTMLを表示
 
-        // WebViewのエラーを処理
+        // WebViewのエラー処理
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
