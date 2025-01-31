@@ -1,171 +1,88 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>デジタル時計</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #ff66b2, #ffccff);
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            opacity: 0;
-            animation: fadeIn 2s forwards;
-        }
+package com.coara.javatest;
 
-        .container {
-            position: relative;
-            text-align: center;
-        }
+import android.os.Build;
+import android.os.Bundle;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceError;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.webkit.WebSettings;
+import android.widget.Toast;
+import android.webkit.CookieManager;
+import androidx.appcompat.app.AppCompatActivity;
 
-        /* 年号 */
-        .year {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 18px;
-            color: #fff;
-            font-weight: 600;
-        }
+public class MainActivity extends AppCompatActivity {
 
-        /* 日付 */
-        .date {
-            font-size: 22px;
-            color: #fff;
-            font-weight: 600;
-            margin-bottom: 10px;
-            cursor: pointer;
-            border-radius: 12px;
-            display: inline-block;
-            padding: 10px 20px;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
+    private WebView webView;
 
-        .date:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        /* 時計 */
-        .clock {
-            font-size: 80px;
-            color: #fff;
-            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-            font-weight: 600;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-        }
+        // WebViewの設定
+        webView = findViewById(R.id.webView);
 
-        /* 12/24切り替えボタン */
-        .toggle-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: #ff66b2;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-        }
+        // JavaScriptを有効にする
+        webView.getSettings().setJavaScriptEnabled(true);
 
-        .toggle-button:hover {
-            background-color: #ff3385;
-        }
+        // キャッシュを無効にする
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュを無効化
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
+        // API 33で非推奨となったメソッドは使わない
+        // webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュ無効化
 
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
+        // 追加のキャッシュ関連設定
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } 
+        // CookieSyncManagerは使用しない
 
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- 年号 -->
-        <div class="year" id="year">2024</div>
+        // データベースやストレージを無効にする（これもキャッシュの一種として扱われることがある）
+        webView.getSettings().setDatabaseEnabled(false);  // データベース無効化
+        webView.getSettings().setDomStorageEnabled(false);  // DOMストレージ無効化
 
-        <!-- 日付 -->
-        <div class="date" id="date" onclick="animateDate()"></div>
-
-        <!-- 時計 -->
-        <div class="clock" id="clock"></div>
-
-        <!-- 12/24切り替えボタン -->
-        <button class="toggle-button" onclick="toggleTimeFormat()">12/24</button>
-    </div>
-
-    <script>
-        let is24Hour = false;
-        const clockElement = document.getElementById('clock');
-        const yearElement = document.getElementById('year');
-        const dateElement = document.getElementById('date');
-
-        function updateClock() {
-            const now = new Date();
-            const months = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
-            const month = months[now.getMonth()];
-            const day = now.getDate();
-            const formattedDate = `${month} ${day}日`;
-
-            // 日付を更新
-            dateElement.textContent = formattedDate;
-
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
-            let ampm = '';
-
-            // 12時間制の場合の処理
-            if (!is24Hour) {
-                ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12;  // 0時を12に表示
+        // インターネットアクセスを完全に遮断する
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                Toast.makeText(MainActivity.this, "エラーが発生しました: " + error.getDescription(), Toast.LENGTH_SHORT).show();
             }
 
-            hours = hours < 10 ? '0' + hours : hours;
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                Toast.makeText(MainActivity.this, "エラーが発生しました: " + description, Toast.LENGTH_SHORT).show();
+            }
 
-            clockElement.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                // ローカルHTMLファイルにリンクがある場合のみ読み込む
+                if (url.startsWith("file://")) {
+                    view.loadUrl(url);
+                    return true;
+                } else {
+                    // 外部URLへのアクセスは無効化
+                    return false;
+                }
+            }
+        });
+
+        // ローカルのHTMLファイルを読み込む
+        webView.loadUrl("file:///android_asset/index.html");  // オフラインでローカルHTMLを表示
+    }
+
+    // 戻るボタンを無効にする
+    @Override
+    public void onBackPressed() {
+        // 戻るボタンが押された時にWebViewが履歴を戻らないようにする
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();  // 履歴がない場合は通常の戻る処理
         }
-
-        function toggleTimeFormat() {
-            is24Hour = !is24Hour;
-            updateClock();
-        }
-
-        function animateDate() {
-            // 日付をタップした時のアニメーション
-            dateElement.style.animation = 'shake 0.5s ease';
-            setTimeout(() => {
-                dateElement.style.animation = '';
-            }, 500);
-        }
-
-        setInterval(updateClock, 1000);
-        updateClock(); // 初回表示
-    </script>
-</body>
-</html>
+    }
+}
