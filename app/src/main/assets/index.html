@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デジタル時計</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0e6f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        .clock {
+            text-align: center;
+            font-size: 80px;
+            color: #ff66b2;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .year {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            color: #888;
+        }
+
+        .toggle-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #ff66b2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .toggle-button:hover {
+            background-color: #ff3385;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="clock" id="clock"></div>
+    <div class="year" id="year">2024</div>
+    <button class="toggle-button" onclick="toggleTimeFormat()">12/24</button>
+
+    <script>
+        let is24Hour = false;
+        const clockElement = document.getElementById('clock');
+        const yearElement = document.getElementById('year');
+        
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            let ampm = '';
+
+            if (!is24Hour) {
+                ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+            }
+
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            clockElement.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+
+        function toggleTimeFormat() {
+            is24Hour = !is24Hour;
+            changeTimeFormat(is24Hour);
+        }
+
+        function changeTimeFormat(format24) {
+            is24Hour = format24;
+            updateClock();
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock(); // 初回表示
+    </script>
+</body>
+</html>
