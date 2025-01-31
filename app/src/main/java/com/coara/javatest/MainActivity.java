@@ -1,7 +1,6 @@
 package com.coara.javatest;
 
 import android.os.Bundle;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -11,7 +10,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
     private Button toggleButton;
-    private boolean is24Hour = false; // 24時間表示かAM/PMかを切り替えるフラグ
+    private boolean is24Hour = false; // 24時間表示か12時間表示かを切り替えるフラグ
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
