@@ -10,7 +10,6 @@ import android.webkit.WebViewClient;
 import android.webkit.WebSettings;
 import android.widget.Toast;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,17 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
         // キャッシュを無効にする
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュを無効化
-        webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュ無効化
+
+        // API 33で非推奨となったメソッドは使わない
+        // webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュ無効化
 
         // 追加のキャッシュ関連設定
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().removeAllCookies(null);
             CookieManager.getInstance().flush();
-        } else {
-            CookieSyncManager.createInstance(this);
-            CookieManager cookieManager = CookieManager.getInstance();
-            cookieManager.removeAllCookie();
-        }
+        } 
+        // CookieSyncManagerは使用しない
 
         // データベースやストレージを無効にする（これもキャッシュの一種として扱われることがある）
         webView.getSettings().setDatabaseEnabled(false);  // データベース無効化
