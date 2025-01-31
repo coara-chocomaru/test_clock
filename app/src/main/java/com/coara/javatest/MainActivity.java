@@ -20,16 +20,18 @@ public class MainActivity extends AppCompatActivity {
 
         // WebViewの設定
         webView = findViewById(R.id.webView);
+
+        // JavaScriptを有効にする
         webView.getSettings().setJavaScriptEnabled(true);
+
+        // キャッシュ設定を無効にする
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE); // キャッシュなしで常にネットワークから読み込む
+        webView.getSettings().setAppCacheEnabled(false);  // アプリのキャッシュを無効化
 
         // WebView内でURLを読み込む
         webView.loadUrl("file:///android_asset/index.html");
 
-        // JavaScriptの動作を許可
-        webView.setWebViewClient(new WebViewClient());
-        webView.setWebChromeClient(new WebChromeClient());
-
-        // APIレベルによるエラーハンドリング
+        // WebViewのエラーを処理
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "エラーが発生しました: " + description, Toast.LENGTH_SHORT).show();
             }
         });
+
+        // WebChromeClientを設定（オプション）
+        webView.setWebChromeClient(new WebChromeClient());
     }
 
     // 戻るボタンを無効にする
