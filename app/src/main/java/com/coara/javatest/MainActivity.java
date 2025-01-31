@@ -28,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
         // キャッシュ無効化の設定（API 9以降に対応）
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュなしで常にネットワークから読み込む
 
-        // 不要なキャッシュストレージを完全に無効化
-        webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュを無効化
+        // 不要なキャッシュストレージを無効化
         webView.getSettings().setDomStorageEnabled(false);  // DOMストレージ無効化
 
         // httpsのみを使用し、cleartext通信を防ぐ
