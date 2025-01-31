@@ -29,11 +29,10 @@ public class MainActivity extends AppCompatActivity {
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュなしで常にネットワークから読み込む
 
         // 不要なキャッシュストレージを無効化
-        webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュを無効化
+        // setAppCacheEnabledは廃止されているため、削除しました。
         webView.getSettings().setDomStorageEnabled(true);  // DOMストレージを有効化（オプション）
 
         // httpsのみを使用し、cleartext通信を防ぐ
-        // この設定は、Android 9以降におけるセキュリティポリシーに準拠するために重要です。
         webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
 
         // WebView内でURLを読み込む
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         // WebChromeClientを設定（オプション）
         webView.setWebChromeClient(new WebChromeClient());
-
     }
 
     // 戻るボタンを無効にする
