@@ -1,1 +1,2 @@
 # javatest
+初めてwebviewでhtmlを使って時計を作った記念アプリ
