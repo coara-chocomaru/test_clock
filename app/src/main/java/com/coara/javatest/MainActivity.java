@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
         // キャッシュを無効にする
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュを無効化
 
-        // API 33で非推奨となったメソッドは使わない
-        // webView.getSettings().setAppCacheEnabled(false);  // アプリキャッシュ無効化
 
         // 追加のキャッシュ関連設定
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
