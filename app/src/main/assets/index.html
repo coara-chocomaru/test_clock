@@ -25,7 +25,7 @@
             text-align: center;
         }
 
-        /* 年号 */
+
         .year {
             position: absolute;
             top: 10px;
@@ -35,7 +35,7 @@
             font-weight: 600;
         }
 
-        /* 日付 */
+
         .date {
             font-size: 22px;
             color: #fff;
@@ -52,25 +52,25 @@
             background-color: rgba(255, 255, 255, 0.3);
         }
 
-        /* 時計 */
+    
         .clock {
             font-size: 80px;
-            color: #f8f8f8; /* 柔らかい白 */
-            text-shadow: none; /* 黒い影を削除 */
+            color: #f8f8f8; 
+            text-shadow: none; 
             font-weight: 600;
             padding: 20px 40px;
-            background-color: rgba(255, 255, 255, 0.4); /* 少し透けた白 */
-            border-radius: 25px; /* 丸みを加える */
+            background-color: rgba(255, 255, 255, 0.4); 
+            border-radius: 25px; 
             display: inline-block;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* 柔らかな影 */
-            transition: transform 0.2s ease-in-out; /* 文字のアニメーション効果 */
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.2s ease-in-out; 
         }
 
         .clock:hover {
-            transform: scale(1.05); /* ホバー時に少し大きくなる */
+            transform: scale(1.05);
         }
 
-        /* 12/24切り替えボタン */
+        
         .toggle-button {
             position: absolute;
             top: 10px;
@@ -110,16 +110,16 @@
 </head>
 <body>
     <div class="container">
-        <!-- 年号 -->
+        
         <div class="year" id="year">2024</div>
 
-        <!-- 日付 -->
+        
         <div class="date" id="date" onclick="animateDate()"></div>
 
-        <!-- 時計 -->
+        
         <div class="clock" id="clock"></div>
 
-        <!-- 12/24切り替えボタン -->
+        
         <button class="toggle-button" onclick="toggleTimeFormat()">12/24</button>
     </div>
 
@@ -136,7 +136,7 @@
             const day = now.getDate();
             const formattedDate = `${month} ${day}日`;
 
-            // 日付を更新
+        
             dateElement.textContent = formattedDate;
 
             let hours = now.getHours();
@@ -144,11 +144,11 @@
             let seconds = now.getSeconds();
             let ampm = '';
 
-            // 12時間制の場合の処理
+            
             if (!is24Hour) {
                 ampm = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
-                hours = hours ? hours : 12;  // 0時を12に表示
+                hours = hours ? hours : 12;  
             }
 
             hours = hours < 10 ? '0' + hours : hours;
@@ -164,7 +164,7 @@
         }
 
         function animateDate() {
-            // 日付をタップした時のアニメーション
+    
             dateElement.style.animation = 'shake 0.5s ease';
             setTimeout(() => {
                 dateElement.style.animation = '';
@@ -172,7 +172,7 @@
         }
 
         setInterval(updateClock, 1000);
-        updateClock(); // 初回表示
+        updateClock(); 
     </script>
 </body>
 </html>
