@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- WebViewを配置 -->
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
