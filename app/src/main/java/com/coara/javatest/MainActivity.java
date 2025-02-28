@@ -21,28 +21,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // WebViewの設定
+    
         webView = findViewById(R.id.webView);
 
-        // JavaScriptを有効にする
+        
         webView.getSettings().setJavaScriptEnabled(true);
 
-        // キャッシュを無効にする
+    
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュを無効化
 
 
-        // 追加のキャッシュ関連設定
+    
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().removeAllCookies(null);
             CookieManager.getInstance().flush();
         } 
-        // CookieSyncManagerは使用しない
+        
 
-        // データベースやストレージを無効にする（これもキャッシュの一種として扱われることがある）
-        webView.getSettings().setDatabaseEnabled(false);  // データベース無効化
-        webView.getSettings().setDomStorageEnabled(false);  // DOMストレージ無効化
+        
+        webView.getSettings().setDatabaseEnabled(false); 
+        webView.getSettings().setDomStorageEnabled(false); 
 
-        // インターネットアクセスを完全に遮断する
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
@@ -58,25 +57,19 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // ローカルHTMLファイルにリンクがある場合のみ読み込む
                 if (url.startsWith("file://")) {
                     view.loadUrl(url);
                     return true;
                 } else {
-                    // 外部URLへのアクセスは無効化
                     return false;
                 }
             }
         });
 
-        // ローカルのHTMLファイルを読み込む
-        webView.loadUrl("file:///android_asset/index.html");  // オフラインでローカルHTMLを表示
+        webView.loadUrl("file:///android_asset/index.html"); 
     }
 
-    // 戻るボタンを無効化
     @Override
     public void onBackPressed() {
-        // バックキーを無効化
-        // 何も処理しないことでバックキーを無効化
     }
 }
