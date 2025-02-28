@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- アプリケーション名 -->
-    <string name="app_name">時計テスト</string>
+    <string name="app_name">時計</string>
 </resources>
