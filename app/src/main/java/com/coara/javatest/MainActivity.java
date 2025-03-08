@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
 
     
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  // キャッシュを無効化
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT); 
 
 
     
