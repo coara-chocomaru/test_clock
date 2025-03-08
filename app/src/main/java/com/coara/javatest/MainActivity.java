@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         
 
         
-        webView.getSettings().setDatabaseEnabled(false); 
-        webView.getSettings().setDomStorageEnabled(false); 
+        webView.getSettings().setDatabaseEnabled(true); 
+        webView.getSettings().setDomStorageEnabled(true); 
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
