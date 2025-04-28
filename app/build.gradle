@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdk 34 // 最新の正しい値を確認してください
+    compileSdk 35
     namespace 'com.coara.javatest'
 
     defaultConfig {
